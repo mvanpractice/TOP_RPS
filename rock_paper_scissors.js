@@ -2,9 +2,6 @@
  * The Odin Project Foundation Training - Rock Paper Scissors
  */
 
-let humaScore = 0;
-let computerScore = 0;
-
 const moves = ['rock', 'paper', 'scissors'];
 
 const rules = {
@@ -28,37 +25,55 @@ function getHumanChoice() {
     return userInput.trim().toLocaleLowerCase();
 }
 
-function playRound(humanChoice, computerChoice) {
-    if (humanChoice === computerChoice) return 'draw';
-
-    if (rules[humanChoice] === computerChoice) {
-        humaScore++;
-
-        return {
-            winner: 'human',
-            moves: {humanChoice, computerChoice},
-            score: {humaScore, computerScore},
-            message: `You win! ${humanChoice} beats ${computerChoice}`
-        };
-    } else {
-        computerScore++;
-
-        return {
-            winner: 'computer',
-            moves: {humanChoice, computerChoice},
-            score: {humaScore, computerScore},
-            message: `You lose! ${computerChoice} beats ${humanChoice}`
-        };
-    }
-}
-
-// const humanSelection = getHumanChoice();
-// const computerSelection = getComputerChoice();
-
 // const res = playRound(humanSelection, computerSelection);
 
 function playGame() {
-    // call playRound to play 5 rounds
-    // keep track of the scores and declares winner at the end
+    let humaScore = 0;
+    let computerScore = 0;
+    let result = [];
+
+    function playRound(humanChoice, computerChoice) {
+        if (humanChoice === computerChoice) {
+             return {
+                winner: 'draw',
+                moves: {humanChoice, computerChoice},
+                score: {humaScore, computerScore},
+                message: `Draw! You picked: ${humanChoice} and Computer picked: ${computerChoice}`
+             };
+        }
+
+        if (rules[humanChoice] === computerChoice) {
+            humaScore++;
+
+            return {
+                winner: 'human',
+                moves: {humanChoice, computerChoice},
+                score: {humaScore, computerScore},
+                message: `You win! ${humanChoice} beats ${computerChoice}`
+            };
+        } else {
+            computerScore++;
+
+            return {
+                winner: 'computer',
+                moves: {humanChoice, computerChoice},
+                score: {humaScore, computerScore},
+                message: `You lose! ${computerChoice} beats ${humanChoice}`
+            };
+        }
+    }
+
+    // 5 Rounds
+    for (let i = 0; i < 5; i++) {
+        const humanSelection = getHumanChoice();
+        const computerSelection = getComputerChoice();
+        const round = playRound(humanSelection, computerSelection);
+
+        result.push(round);
+    }
+
+    return result;
 
 }
+
+console.log(playGame());
