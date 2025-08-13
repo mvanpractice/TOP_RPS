@@ -25,55 +25,51 @@ function getHumanChoice() {
     return userInput.trim().toLocaleLowerCase();
 }
 
-// const res = playRound(humanSelection, computerSelection);
-
 function playGame() {
-    let humaScore = 0;
+    let humanScore = 0;
     let computerScore = 0;
-    let result = [];
 
+    // Inner function to play a round
     function playRound(humanChoice, computerChoice) {
         if (humanChoice === computerChoice) {
              return {
                 winner: 'draw',
-                moves: {humanChoice, computerChoice},
-                score: {humaScore, computerScore},
                 message: `Draw! You picked: ${humanChoice} and Computer picked: ${computerChoice}`
              };
-        }
-
-        if (rules[humanChoice] === computerChoice) {
-            humaScore++;
-
+        } else if (rules[humanChoice] === computerChoice) {
             return {
                 winner: 'human',
-                moves: {humanChoice, computerChoice},
-                score: {humaScore, computerScore},
                 message: `You win! ${humanChoice} beats ${computerChoice}`
             };
         } else {
-            computerScore++;
-
             return {
                 winner: 'computer',
-                moves: {humanChoice, computerChoice},
-                score: {humaScore, computerScore},
                 message: `You lose! ${computerChoice} beats ${humanChoice}`
             };
         }
     }
 
-    // 5 Rounds
+    // Do 5 Rounds
     for (let i = 0; i < 5; i++) {
         const humanSelection = getHumanChoice();
         const computerSelection = getComputerChoice();
         const round = playRound(humanSelection, computerSelection);
 
-        result.push(round);
+        // Log winner in each round
+        console.log(round.message);
+
+        if (round.winner === 'human') humanScore++;
+        if (round.winner === 'computer') computerScore++;
+    }   
+    
+    // Log the entire game winner (result)
+    if (humanScore === computerScore) {
+        console.log('DRAW');
+    } else if (humanScore > computerScore) {
+        console.log('You Win!')
+    } else {
+        console.log('You lose!');
     }
-
-    return result;
-
 }
 
-console.log(playGame());
+playGame();
