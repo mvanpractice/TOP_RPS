@@ -101,6 +101,7 @@ function displayResult(round) {
     resultDisplay.currentWinnerDisplay.textContent = roundWinner;
 }
 
+const gameRecord = [];
 // Event Listener
 container.addEventListener('click', event => {
     event.stopPropagation();
@@ -112,9 +113,14 @@ container.addEventListener('click', event => {
         const computerSelection = getComputerChoice();
 
         const round = playGame(humanSelection, computerSelection);
+        gameRecord.push(round);
 
-        if (round.currentRound > totalRound) {
-            displayGameOver();
+        if (round.currentRound >= totalRound) {
+            displayResult(round);
+
+            // Game winner
+            displayGameOver(gameRecord);
+
             return;
         }
 
@@ -122,10 +128,25 @@ container.addEventListener('click', event => {
     }
 });
 
-function displayGameOver(round) {
+function displayGameOver(gameRecord) {
+    const humanWin = gameRecord.filter(record => {
+        return record.score.winner === 'human';
+    });
+
+    const computerWin = gameRecord.filter(record => {
+        return record.score.winner === 'computer'
+    });
+
     const winnerDisplay = $('.result');
     const p = document.createElement('p');
 
     winnerDisplay.appendChild(p);
-    p.textContent = 'Game Over!';
+
+    if (humanWin === computerWin) {
+        p.textContent = "It's a Draw!";
+    } else if (humanWin > computerWin) {
+        p.textContent = 'You won the game!';
+    } else {
+        p.textContent = 'You lost! Computer won the game!';
+    }
 }
